@@ -1,119 +1,115 @@
 <?php
 session_start();
 error_reporting(0);
-
 include('includes/dbconnection.php');
-?>
-<!DOCTYPE HTML>
-<html>
-<head>
-<title>Zoo Management System | Home Page</title>
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<script src="js/jquery-1.11.1.min.js"></script>
-<script src="js/bootstrap.js"></script>
+if(isset($_POST['login']))
+  {
+    $adminuser=$_POST['username'];
+    $password=md5($_POST['password']);
+    $query=mysqli_query($con,"select ID from tbladmin where  UserName='$adminuser' && Password='$password' ");
+    $ret=mysqli_fetch_array($query);
+    if($ret>0){
+      $_SESSION['zmsaid']=$ret['ID'];
+     header('location:dashboard.php');
+    }
+    else{
+     echo '<script>alert("Invalid Detail.")</script>';
+    }
+  }
+  ?>
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Login - Zoo Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="assets/images/icon/favicon.ico">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/css/metisMenu.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/slicknav.min.css">
+    <!-- amchart css -->
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <!-- others css -->
+    <link rel="stylesheet" href="assets/css/typography.css">
+    <link rel="stylesheet" href="assets/css/default-css.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <!-- modernizr css -->
+    <script src="assets/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
+
 <body>
-		<?php include_once('includes/header.php');?>
-			<div class="header-banner">
-				<div class="container">
-					<div class="head-banner">
-						<h3>Visit to a Zoo</h3>
-						<p> A visit to a zoo offers us an opportunity to see the wild animals.Zoo is a place where we can see different animals and birds at one place. It has great attraction particularly for the children. A visit to a zoo gives us both information and entertainment. We come to learn about the rare species.</p>
-					</div>
-					<div class="banner-grids">
-						<div class="col-md-6 banner-grid">
-							<h4>Vestibulum sagittis</h4>
-							<p>Donec dui velit, hendrerit id pharetra nec, posuere porta nisl. Donec magna nulla, commodo in ultrices faucibus lacus aliquet.</p>
-						</div>
-						<div class="col-md-6 banner-grid">
-						<h4>Itaque Earum Rerum</h4>
-							<p>Donec dui velit, hendrerit id pharetra nec, posuere porta nisl. Donec magna nulla, commodo in ultrices faucibus lacus aliquet.</p>
-						</div>
-						<div class="clearfix"></div>
-					</div>
-				</div>
-			</div>
-		<!--header-->
-			<!--welcome-->
-			<div class="content">
-				<div class="welcome">
-					<div class="container">
-						<h2>welcome to zoo planet</h2>
-							<div class="welcome-grids">
-								
-								<?php 
- $query=mysqli_query($con,"select * from tblanimal order by rand() limit 4");
- while ($row=mysqli_fetch_array($query)) {
- ?>
-								<div class="col-md-3 welcome-grid" >
-									<img src="admin/images/<?php echo $row['AnimalImage'];?>" width='220' height='200' alt=" " class="img-responsive" />
-									<div class="wel-info">
-										<h4><a href="animal-detail.php?anid=<?php echo $row['ID'];?>"><?php echo $row['AnimalName'];?>(<?php echo $row['Breed'];?>)</a></h4>
-										<p><?php echo substr($row['Description'],0,100);?>.</p>
-									</div>
-								</div><?php }?>
-								<br>
-								<div class="clearfix"></div>
-							</div>
-					</div>
-				</div>
-			<!--welcome-->
-			
-				<!--animals-->
-					<div class="animals">
-						<div class="container">
-							<h3>animals</h3>
-							<div class="clients">
-								<ul id="flexiselDemo3">
-									<?php 
- $query=mysqli_query($con,"select * from tblanimal");
- while ($row=mysqli_fetch_array($query)) {
- ?>
-									<li><img src="admin/images/<?php echo $row['AnimalImage'];?>" width='220' height='200' alt=" " class="img-responsive" /></li><?php }?>
-								</ul>
-									<script type="text/javascript">
-								$(window).load(function() {
-									
-								  $("#flexiselDemo3").flexisel({
-										visibleItems: 5,
-										animationSpeed: 1000,
-										autoPlay: true,
-										autoPlaySpeed: 3000,    		
-										pauseOnHover: true,
-										enableResponsiveBreakpoints: true,
-										responsiveBreakpoints: { 
-											portrait: { 
-												changePoint:480,
-												visibleItems: 1
-											}, 
-											landscape: { 
-												changePoint:640,
-												visibleItems: 2
-											},
-											tablet: { 
-												changePoint:768,
-												visibleItems: 3
-											}
-										}
-									});
-									});
-								</script>
-								<script type="text/javascript" src="js/jquery.flexisel.js"></script>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
-			<!--models-->
-		
-				
-						<!--events-->
-						<!--specials-->
-				 <?php include_once('includes/special.php');?>
-			</div>
-			<!--footer-->
-			<?php include_once('includes/footer.php');?>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <!-- preloader area start -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    <!-- preloader area end -->
+    <!-- login area start -->
+    <div class="login-area">
+        <div class="container">
+            <div class="login-box ptb--100">
+                <form action="#" method="post" name="login">
+                  
+                    <div class="login-form-head">
+                        <h4>Zoo Management System</h4>
+                        <p>Hello there, Sign in and start managing your Admin Template</p>
+                    </div>
+                    <div class="login-form-body">
+                        <div class="form-gp">
+                            <label for="exampleInputEmail1">User Name</label>
+                            <input type="text" id="username" name="username" required="true">
+                            <i class="ti-user"></i>
+                        </div>
+                        <div class="form-gp">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" id="password" name="password" required="true">
+                            <i class="ti-lock"></i>
+                        </div>
+                        <div class="row mb-4 rmber-area">
+                            <div class="col-6">
+                                
+                            </div>
+                            <div class="col-6 text-right">
+                                <a href="forgot-password.php">Forgot Password?</a>
+                            </div>
+                        </div>
+                        <div class="submit-btn-area">
+                            <button id="form_submit" type="submit" name="login">Submit <i class="ti-arrow-right"></i></button>
+                            
+                        </div>
+                        <div style="padding-top: 20px">
+                                <a href="../index.php">Back Home!!</a>
+                            </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- login area end -->
+
+    <!-- jquery latest version -->
+    <script src="assets/js/vendor/jquery-2.2.4.min.js"></script>
+    <!-- bootstrap 4 js -->
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/metisMenu.min.js"></script>
+    <script src="assets/js/jquery.slimscroll.min.js"></script>
+    <script src="assets/js/jquery.slicknav.min.js"></script>
+    
+    <!-- others plugins -->
+    <script src="assets/js/plugins.js"></script>
+    <script src="assets/js/scripts.js"></script>
 </body>
+
 </html>
